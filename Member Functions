@@ -27,3 +27,9 @@ bool getMouseUp(int& x, int& y) - returns true if mouse button is up was clicked
 bool getMouseMotion(int& x, int& y)  - returns true if mouse is in motion and stores the cursor location in x and y
 
 void getMouseLocation(int& x, int& y) -  stores the cursor location in x and y
+
+
+CONSTRUCTOR
+SDL_Plotter(int r=480, int c=640, bool WITH_SOUND = true)
+
+creates a SDL_Plotter object with an r x c window and sound enabled.
