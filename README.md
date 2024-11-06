@@ -26,4 +26,6 @@ Then you need bumpers. So find out how to detect collisions and how to apply for
 
 And then you likely notice how dull your game looks, and you want to create a fancy looking table in a 3d modeling program. So you google for a basic Blender tutorial.
 
+https://www.youtube.com/watch?v=N5CZLSVU0DA&t=19s&pp=ygUTY2xpb24gdHV0b3JpYWwgc2xkMg%3D%3D
+
 
