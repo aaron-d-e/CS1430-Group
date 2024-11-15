@@ -7,12 +7,14 @@
 #include <SDL.h>
 #include "SDL_Plotter.h"
 #include <iostream>
-
+const float GRAVITY = .01;
+const float BOUNCINESS = .8;
 class Ball {
 public:
     Ball(float xInitialPos, float yInitialPos, float startXVelo, float startYVelo, float r, SDL_Color c);
     void Physics(float dT);
     void render (SDL_Renderer* renderer);
+
 private:
     float x, y;
     float xVelocity, yVelocity;
