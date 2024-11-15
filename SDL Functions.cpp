@@ -2,19 +2,25 @@
 // Created by aaron on 10/30/2024.
 //
 #include <iostream>
-#include "SDL Functions.h"
+#include "SDL_Functions.h"
 
 Ball::Ball(float xInitialPos, float yInitialPos, float startXVelo, float startYVelo, float r, SDL_Color c): x(xInitialPos), y(yInitialPos), xVelocity(startXVelo), yVelocity(startYVelo), radius(r), color(c) {}
 
 void Ball::Physics(float dT) {
-    x += xVelocity * dT;
-    y += yVelocity * dT;
+    //yVelocity += GRAVITY;
 
-    if(x + radius < radius || x + radius > 1000-radius) {
-        xVelocity = -xVelocity;
+    yVelocity += (GRAVITY * dT);
+
+    y += yVelocity * dT;
+    x += xVelocity * dT;
+
+    if (x <= radius || x >= 1000 - radius) {
+        xVelocity *= -BOUNCINESS;
+        x = (x <= radius) ? radius : 1000 - radius;
     }
-    if(y+radius < radius || y + radius > 1000-radius) {
-        yVelocity = -yVelocity;
+    if (y <= radius || y >= 1000 - radius) {
+        yVelocity *= -BOUNCINESS;
+        y = (y <= radius) ? radius : 1000 - radius;
     }
 }
 
@@ -29,6 +35,8 @@ void Ball::render (SDL_Renderer* renderer) {
             }
         }
     }
+
+}}
 }
 
 
