@@ -14,7 +14,7 @@ int main(int argc, char ** argv)
     SDL_Window* window = SDL_CreateWindow("Pinball Game 1.0", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 800, SDL_WINDOW_SHOWN); // window
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); // renderer
 
-    Ball b1(500, 500, 0.5, 0.0, 25, {255, 0, 0, 255}); // ball object
+    Ball b1(50, 100, 0.0, 0.0, 25, {255, 0, 0, 255}); // ball object
     Triangle t1(0, SCREEN_HEIGHT / 3, 100, 200, {255,255,255,0});
 
     //game loop
@@ -35,6 +35,7 @@ int main(int argc, char ** argv)
 
 
         b1.Physics(deltaTime);
+        b1.CircleTriangle1();
 
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
