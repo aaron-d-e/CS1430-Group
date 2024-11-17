@@ -2,8 +2,11 @@
 // Created by aaron on 10/30/2024.
 //
 #include <iostream>
+#include <math.h>
 #include "SDL Functions.h"
 
+
+// BALL CLASS
 Ball::Ball(float xInitialPos, float yInitialPos, float startXVelo, float startYVelo, float r, SDL_Color c):
     x(xInitialPos), y(yInitialPos), xVelocity(startXVelo), yVelocity(startYVelo), radius(r), color(c) {}
 
@@ -37,9 +40,31 @@ void Ball::renderBall (SDL_Renderer* renderer) {
         }
     }
 }
+void Ball::CircleTriangle1() { // FIX ME ADD ANGULAR VELOCITY
+    float distancePointLine1;
+    float distancePointLine2;
+    float lineLength;
+    float accuracy = 45;
+    bool collision = false;
+    distancePointLine1 = sqrt(pow(a.x - x, 2) + pow(a.y - y, 2));
+    distancePointLine2 = sqrt(pow(b.x - x, 2) + pow(b.y - y, 2));
+    lineLength = sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+
+    if((distancePointLine1 + distancePointLine2) <= lineLength + accuracy) {
+        collision = true;
+    }
+
+    if(collision) {
+        xVelocity = -xVelocity;
+        yVelocity = -yVelocity;
+    }
+}
+
+//TRIANGLE CLASS
 
 Triangle::Triangle(float xPos, float yPos, float b, float h, SDL_Color c):
     x(xPos), y(yPos), base(b), height(h){}
+
 void Triangle::renderTriangle(SDL_Renderer* renderer) {
     SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
     SDL_RenderDrawLine(renderer, a.x, a.y, c.x, c.y);
@@ -49,7 +74,6 @@ void Triangle::renderTriangle(SDL_Renderer* renderer) {
     SDL_RenderDrawLine(renderer, d.x, d.y, f.x, f.y);
     SDL_RenderDrawLine(renderer, f.x, f.y, e.x, e.y);
 }
-
 
 
 
