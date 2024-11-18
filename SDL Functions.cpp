@@ -10,7 +10,7 @@
 Ball::Ball(float xInitialPos, float yInitialPos, float startXVelo, float startYVelo, float r, SDL_Color c):
     x(xInitialPos), y(yInitialPos), xVelocity(startXVelo), yVelocity(startYVelo), radius(r), color(c) {}
 
-void Ball::Physics(float dT) {
+void Ball::Physics(double dT) {
     //yVelocity += GRAVITY;
 
     yVelocity += (GRAVITY * dT);
@@ -40,23 +40,45 @@ void Ball::renderBall (SDL_Renderer* renderer) {
         }
     }
 }
-void Ball::CircleTriangle1() { // FIX ME ADD ANGULAR VELOCITY
+void Ball::TriangleCollision1(double dT) {  // left triangle
     float distancePointLine1;
     float distancePointLine2;
-    float lineLength;
-    float accuracy = 45;
-    bool collision = false;
-    distancePointLine1 = sqrt(pow(a.x - x, 2) + pow(a.y - y, 2));
-    distancePointLine2 = sqrt(pow(b.x - x, 2) + pow(b.y - y, 2));
-    lineLength = sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+    float lineLength; // left
+    float accuracy = 8;
+    bool collision1 = false;
+    distancePointLine1 = sqrt(pow(a.x - x, 2) + pow(a.y - y, 2)); // left triangle
+    distancePointLine2 = sqrt(pow(c.x - x, 2) + pow(c.y - y, 2));
+    lineLength = sqrt(pow(a.x - c.x, 2) + pow(a.y - c.y, 2));
 
     if((distancePointLine1 + distancePointLine2) <= lineLength + accuracy) {
-        collision = true;
+        collision1 = true;
     }
 
-    if(collision) {
-        xVelocity = -xVelocity;
-        yVelocity = -yVelocity;
+
+    if(collision1) {
+        xVelocity = -BOUNCINESS * dT; //FIX ME ACCURATE X AND Y PHYSICS
+        yVelocity = -BOUNCINESS * dT;
+    }
+}
+
+void Ball::TriangleCollision2(double dT) { // right triangle
+    float distancePointLine3;
+    float distancePointLine4;
+    float lineLength2;
+    float accuracy = 8;
+    bool collision2 = false;
+
+    distancePointLine3 = sqrt(pow(d.x - x, 2) + pow(d.y - y, 2)); // right triangle
+    distancePointLine4 = sqrt(pow(e.x - x, 2) + pow(e.y - y, 2));
+    lineLength2 = sqrt(pow(d.x - e.x, 2) + pow(d.y - e.y, 2));
+
+    if((distancePointLine3 + distancePointLine4) <= lineLength2 + accuracy) {
+        collision2 = true;
+    }
+
+    if(collision2) {
+        xVelocity = -BOUNCINESS * dT; //FIX ME ACCURATE X AND Y PHYSICS
+        yVelocity = -BOUNCINESS * dT;
     }
 }
 
