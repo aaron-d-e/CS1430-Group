@@ -7,16 +7,17 @@
 
 
 // BALL CLASS
-Ball::Ball(float xInitialPos, float yInitialPos, float startXVelo, float startYVelo, float r, SDL_Color c):
+Ball::Ball(double xInitialPos, double yInitialPos, double startXVelo, double startYVelo, double r, SDL_Color c):
     x(xInitialPos), y(yInitialPos), xVelocity(startXVelo), yVelocity(startYVelo), radius(r), color(c) {}
 
 void Ball::Physics(double dT) {
     //yVelocity += GRAVITY;
 
-    yVelocity += (GRAVITY * dT);
+    yVelocity += GRAVITY / (dT * dT);
 
     y += yVelocity * dT;
     x += xVelocity * dT;
+
 
     if (x <= radius || x >= SCREEN_WIDTH - radius) {
         xVelocity *= -BOUNCINESS;
@@ -26,6 +27,7 @@ void Ball::Physics(double dT) {
         yVelocity *= -BOUNCINESS;
         y = (y <= radius) ? radius : SCREEN_HEIGHT - radius;
     }
+
 }
 
 void Ball::renderBall (SDL_Renderer* renderer) {
@@ -41,10 +43,10 @@ void Ball::renderBall (SDL_Renderer* renderer) {
     }
 }
 void Ball::TriangleCollision1(double dT) {  // left triangle
-    float distancePointLine1;
-    float distancePointLine2;
-    float lineLength; // left
-    float accuracy = 8;
+    double distancePointLine1;
+    double distancePointLine2;
+    double lineLength; // left
+    double accuracy = 8;
     bool collision1 = false;
     distancePointLine1 = sqrt(pow(a.x - x, 2) + pow(a.y - y, 2)); // left triangle
     distancePointLine2 = sqrt(pow(c.x - x, 2) + pow(c.y - y, 2));
@@ -55,17 +57,19 @@ void Ball::TriangleCollision1(double dT) {  // left triangle
     }
 
 
-    if(collision1) {
-        xVelocity = -BOUNCINESS * dT; //FIX ME ACCURATE X AND Y PHYSICS
-        yVelocity = -BOUNCINESS * dT;
+    if(collision1){
+        xVelocity *= BOUNCINESS; //FIX ME ACCURATE X AND Y PHYSICS
+        yVelocity *= -BOUNCINESS;
+        x += xVelocity * dT;
+        y += yVelocity * dT;
     }
 }
 
 void Ball::TriangleCollision2(double dT) { // right triangle
-    float distancePointLine3;
-    float distancePointLine4;
-    float lineLength2;
-    float accuracy = 8;
+    double distancePointLine3;
+    double distancePointLine4;
+    double lineLength2;
+    double accuracy = 8;
     bool collision2 = false;
 
     distancePointLine3 = sqrt(pow(d.x - x, 2) + pow(d.y - y, 2)); // right triangle
@@ -77,14 +81,16 @@ void Ball::TriangleCollision2(double dT) { // right triangle
     }
 
     if(collision2) {
-        xVelocity = -BOUNCINESS * dT; //FIX ME ACCURATE X AND Y PHYSICS
-        yVelocity = -BOUNCINESS * dT;
+        xVelocity *= BOUNCINESS; //FIX ME ACCURATE X AND Y PHYSICS
+        yVelocity *= -BOUNCINESS;
+        x -= xVelocity * dT;
+        y += yVelocity * dT;
     }
 }
 
 //TRIANGLE CLASS
 
-Triangle::Triangle(float xPos, float yPos, float b, float h, SDL_Color c):
+Triangle::Triangle(double xPos, double yPos, double b, double h, SDL_Color c):
     x(xPos), y(yPos), base(b), height(h){}
 
 void Triangle::renderTriangle(SDL_Renderer* renderer) {
@@ -96,7 +102,6 @@ void Triangle::renderTriangle(SDL_Renderer* renderer) {
     SDL_RenderDrawLine(renderer, d.x, d.y, f.x, f.y);
     SDL_RenderDrawLine(renderer, f.x, f.y, e.x, e.y);
 }
-
 
 
 
