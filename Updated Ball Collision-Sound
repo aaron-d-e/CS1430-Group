@@ -1,1 +1,35 @@
+#include <SDL_mixer.h>
 
+class Ball {
+public: 
+  float x, y;
+  float xVelocity, yVelocity;
+  const float GRAVITY = 9.8f;
+
+  Ball() : x(0), y(0), xVelocity(0), yVelocity(0) {}
+
+  void Physics(float dT, float surfaceY) {
+    yVelocity += (GRAVITY * dt);
+    y += yVelocity * dT;
+    x += xVelocity * dT;
+
+    CheckCollision(surfaceY);
+  }
+
+  void CheckCollision(float surfaceY) {
+    if (y >= surfaceY) {
+      y = surfaceY;
+      yVelocity = -yVelocity * 0.8f;
+
+      // Play bounce sound
+      Mix_Chunk* bounceSound = Mix_LoadWAV("bounce.wav");
+      if (bounceSound != nullptr) {
+        Mix_PlayChannel(-1, bounceSound, 0);
+        Mix_FreeChunk(bounceSound);
+      }
+    }
+  }
+};
+
+
+//Intergrate physics in main loop and collision detection
