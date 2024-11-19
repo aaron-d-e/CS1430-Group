@@ -1,3 +1,34 @@
+// Intergrate Sound with SDL_Plotter
+void Ball::Physics(float dT, SDL_Plotter& plotter) {
+  yVelocity += (GRAVITY * dT);
+
+  y += yVelocity * dT;
+  x += xVelocity * dT;
+
+  //horizontal collision
+  if (x <= radius || x >= 1000 - radius) {
+    xVelocity *= -BOUNCINESS;
+    x = (x <= radius) ? radius : 1000 - radius;
+
+    plotter.playSound("bounce.wav");
+    }
+  }
+}
+
+//Main game loop intergration - coming later
+
+//Force changes only in wanted
+force gravity(9.8, -PI / 2);
+force userForce;
+
+void Ball::applyForce(const force& f) {
+  float ax = f.getMagnitude() * cos(f.getDirection());
+  float ay = f.getMagnitude() * sin(f.getDirection());
+}
+
+
+
+
 #include <SDL_mixer.h>
 
 class Ball {
