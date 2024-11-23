@@ -15,7 +15,36 @@ void Ball::Physics(float dT, SDL_Plotter& plotter) {
   }
 }
 
-//Main game loop intergration - coming later
+//Main game loop intergration - with color to be tested
+#include <SDL.h>
+#include "SDL_Functions.h"
+#include "SDL_Plotter.h"
+
+int main(int argc, char* argv[]) {
+  SDL_Plotter plotter(1000, 1000);
+plotter.initSound("bouce.wav");
+
+SDL_Color ballColor = {255, 0, 0, 255};
+Ball ball(500, 500, 1.0, -1.0, 20.0, ballColor);
+
+bool running = true;
+while(running) {
+  if (plotter.kbhit()) {
+    char key = plotter.getKey();
+    if (key == 'q') {
+      running = false; // Quit on 'q'
+    }
+    ball.Physics(0.016f, plotter);
+
+    plotter.clear();
+    ball.render(plotter.getRenderer());
+    plotter.update();
+
+  }
+
+  plotter.quitSound("bounce.wav");
+  return 0;
+}
 
 //Force changes only in wanted
 force gravity(9.8, -PI / 2);
