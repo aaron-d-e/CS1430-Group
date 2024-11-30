@@ -1,6 +1,3 @@
-#include <iostream>
-#include <cmath>
-#include "SDL_Functions.h"
 #include "Flipper.h"
 using namespace std;
 
@@ -12,18 +9,24 @@ int main(int argc, char** argv) {
     SDL_Window* window = SDL_CreateWindow("Pinball Game 1.0", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    Ball b1(400, 400, -0.5, -0.1, 20, {255, 0, 0, 255});
+    //initialize environment
+    //BALL INITIAL X and Y are initialized in SDL_Functions.h with other constants
+    Ball b1(BALL_INITIAL_X, BALL_INITIAL_Y, 0.0, -0.1, 20, {255, 0, 0, 255});
     Triangle t1(0, SCREEN_HEIGHT / 3, 100, 200, {255,255,255,0});
+
+    //initialize score
+    Score score(0,10, 1.0);
+
     //load texture for Flipper
     SDL_Surface* surface = SDL_LoadBMP("../images/flipper.bmp");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
-    Flipper leftFlipper(renderer, 190,735,0);
-    Flipper rightFlipper(renderer, 500, 735,0);
+    Flipper leftFlipper(renderer, 200,745,0);
+    Flipper rightFlipper(renderer, 450, 745,0);
 
     bool isRunning = true;
 
-    while (isRunning) {
+    while (isRunning && score.lives > 0) {
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
                 case SDL_QUIT:
@@ -88,12 +91,13 @@ int main(int argc, char** argv) {
 
         SDL_SetRenderDrawColor(renderer,255,255,255,0);
         //SDL_RenderDrawRect(renderer, &rect);
-
         leftFlipper.renderFlipper(renderer, texture,true);
         rightFlipper.renderFlipper(renderer,texture,false);
 
-        leftFlipper.collision(renderer);
-        rightFlipper.collision(renderer);
+        leftFlipper.collision(renderer, b1, deltaTime);
+        rightFlipper.collision(renderer, b1, deltaTime);
+
+        score.updateLife(b1);
 
         b1.renderBall(renderer);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0); // color for triangles
