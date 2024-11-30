@@ -6,24 +6,29 @@
 #define SDL_FUNCTIONS_H
 #include <SDL.h>
 #include <iostream>
-const double GRAVITY = .0001;
+const double GRAVITY = .0006;
 const double BOUNCINESS = .8;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
+const int BALL_INITIAL_X = 100;
+const int BALL_INITIAL_Y = 550;
 // BALL CLASS
 class Ball {
 public:
     Ball(double xInitialPos, double yInitialPos, double startXVelo, double startYVelo, double r, SDL_Color c); // BALL CONSTRUCTOR
     void Physics(double dT); //FUNCTION THAT CALCULATES PHYSICS FOR BALL
     void renderBall (SDL_Renderer* renderer); //FUNCTION THAT RENDERS BALL TO SCREEN
-    float GetX() const { return x; } //GETS X VALUE, *currently unused*
-    float GetY() const { return y; } // GETS Y VALUE, *currently unused*
-    float GetYVel() const {return yVelocity;}
-    float GetXVel() const {return xVelocity;}
-    void SetX(float tempX){x = tempX;}
-    void SetY(float tempY){y = tempY;}
-    void SetXVelo(float tempXVelo){xVelocity = tempXVelo;}
-    void SetYVelo(float tempYVelo){yVelocity = tempYVelo;}
+    void reset();
+    float getX() const { return x; } //GETS X VALUE, *currently unused*
+    float getY() const { return y; } // GETS Y VALUE, *currently unused*
+    float getYVel() const {return yVelocity;}
+    float getXVel() const {return xVelocity;}
+    double getRadius(){return radius;};
+    void setX(float tempX){x = tempX;}
+    void setY(float tempY){y = tempY;}
+    void setXVelo(float tempXVelo){xVelocity = tempXVelo;}
+    void setYVelo(float tempYVelo){yVelocity = tempYVelo;}
+
     
     void TriangleCollision1(double dT); //COLLISION FOR TRIANGLE ON LEFT SIDE OF SCREEN
     void TriangleCollision2(double dT); // COLLISION FOR TRIANGLE ON RIGHT SIDE OF SCREEN
@@ -51,6 +56,15 @@ private:
     SDL_Point a = {0, 550}, b = {0, 700}, c = {200, 750};
     SDL_Point d = {799, 550}, e = {599, 750}, f = {799, 700};
 
+};
+
+struct Score {
+    int totalScore;
+    int lives;
+    float multiplier;
+    Score(int totalScore, int lives, float multiplier): totalScore(totalScore), lives(lives), multiplier(multiplier){}
+    void addScore(int score);
+    void updateLife(Ball &b1);
 };
 
 void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c);
