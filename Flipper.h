@@ -5,6 +5,7 @@
 #ifndef SDL2_TEST_FLIPPER_H
 #define SDL2_TEST_FLIPPER_H
 #include <SDL.h>
+#include "SDL_Functions.h"
 #include <cmath>
 
 class Flipper{
@@ -21,6 +22,6 @@ public:
     void renderFlipper(SDL_Renderer* renderer, SDL_Texture* texture, bool invert);
     void incrementAngle();
     void decrementAngle();
-    void collision(SDL_Renderer *renderer);
+    void collision(SDL_Renderer *renderer, Ball& ball, double dt);
 };
 #endif //SDL2_TEST_FLIPPER_H
