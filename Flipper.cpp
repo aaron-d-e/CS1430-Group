@@ -2,12 +2,15 @@
 // Created by Andrew Hutcheson on 11/19/2024.
 //
 #include "Flipper.h"
+
+#include "SDL_Functions.h"
+
 double toRadians(double degrees) {
     return degrees * M_PI / 180.0;
 }
 
 Flipper::Flipper(SDL_Renderer *renderer, int x, int y, float angle): xPos(x), yPos(y), angle(angle) {
-    box = {xPos,yPos,120,20};
+    box = {xPos,yPos,150,20};
     this->angle = angle;
 }
 
@@ -50,7 +53,7 @@ void Flipper::decrementAngle(){
     }
 }
 
-void Flipper::collision(SDL_Renderer* renderer) {
+void Flipper::collision(SDL_Renderer* renderer, Ball& ball, double dt) {
     //draw collision line
     SDL_Point basePoint;
     SDL_Point endPoint;
@@ -75,8 +78,48 @@ void Flipper::collision(SDL_Renderer* renderer) {
 
         //SDL_RenderDrawPoint(renderer, xPos+box.w-10,yPos);
     }
+    bool collision = false;
+    double accuracy = 8;
+    double distance2;
+    double distance1;
+    double lineLength;
+
+    distance2 = sqrt(pow(basePoint.x - ball.getX(), 2) + pow(basePoint.y - ball.getY(), 2)); // right triangle
+    distance1 = sqrt(pow(endPoint.x - ball.getX(), 2) + pow(endPoint.y - ball.getY(), 2));
+    lineLength = sqrt(pow(basePoint.x - endPoint.x, 2) + pow(basePoint.y - endPoint.y, 2));
+
+    if((distance2 + distance1) <= lineLength + accuracy) {
+        collision = true;
+    }
+
+    if(collision){
+        /*ball.setXVelo(ball.getXVel() * BOUNCINESS * 1.5); //FIX ME ACCURATE X AND Y PHYSICS
+        ball.setYVelo(-ball.getYVel() * BOUNCINESS * 1.5);
+        ball.setX(ball.getX() + ball.getXVel() * dt);
+        ball.setY(ball.getY() + ball.getYVel() * dt);*/
+
+        double speed = sqrt(pow(ball.getXVel(), 2) + pow(ball.getYVel(), 2));
+
+        // Calculate the new velocity components based on angle
+        double newXVel;
+        double newYVel;
+        if (isFlipped) {
+            newXVel = (abs(angle) > 5) ? speed * cos(angle) * 1.05 : ball.getXVel() * BOUNCINESS;
+            newYVel = (abs(angle) > 5) ? speed * sin(angle) * 1.05 : ball.getYVel() * BOUNCINESS;
+        }else {
+            newXVel = (abs(angle) > 5) ? -speed * cos(abs(angle)) * 1.05 : ball.getXVel() * BOUNCINESS;
+            newYVel = (abs(angle) > 5) ? -speed * sin(abs(angle)) * 1.05 : ball.getYVel() * BOUNCINESS;
+        }
 
 
+        // Update ball's velocity
+        ball.setXVelo(newXVel);
+        ball.setYVelo(-newYVel); // Reverse Y velocity to simulate bounce
+
+        // Update ball's position
+        ball.setX(ball.getX() + ball.getXVel() * dt);
+        ball.setY(ball.getY() + ball.getYVel() * dt);
+    }
     //SDL_RenderDrawLine(renderer, basePoint.x, basePoint.y, endPoint.x, endPoint.y);
     //SDL_RenderDrawLine()
 }
