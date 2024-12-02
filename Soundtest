@@ -1,1 +1,48 @@
+#include "SDL_Plotter.h"
+
+class Ball {
+private:
+    double x, y; // Position
+    double xVelocity, yVelocity; // Velocity
+    double radius; // Radius
+    SDL_Color color;
+    SDL_Plotter* plotter; // Pointer to SDL_Plotter for sound
+
+public:
+    Ball(double xInitialPos, double yInitialPos, double startXVelo, double startYVelo, double r, SDL_Color c, SDL_Plotter* plt)
+        : x(xInitialPos), y(yInitialPos), xVelocity(startXVelo), yVelocity(startYVelo), radius(r), color(c), plotter(plt) {
+        plotter->initSound("bounce.wav");
+    }
+
+    void Physics(double dT) {
+        yVelocity += GRAVITY / (dT * dT);
+        y += yVelocity * dT;
+        x += xVelocity * dT;
+
+        if (x <= radius || x >= SCREEN_WIDTH - radius) {
+            xVelocity *= -BOUNCINESS;
+            x = (x <= radius) ? radius : SCREEN_WIDTH - radius;
+            plotter->playSound("bounce.wav"); // Play sound on horizontal collision
+        }
+        if (y <= radius || y >= SCREEN_HEIGHT - radius) {
+            yVelocity *= -BOUNCINESS;
+            y = (y <= radius) ? radius : SCREEN_HEIGHT - radius;
+            plotter->playSound("bounce.wav"); // Play sound on vertical collision
+        }
+    }
+
+    void renderBall(SDL_Renderer* renderer) {
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        for (int i = 0; i < radius * 2; i++) {
+            for (int j = 0; j < radius * 2; j++) {
+                int dx = radius - i;
+                int dy = radius - j;
+                if ((dx * dx + dy * dy) <= (radius * radius)) {
+                    SDL_RenderDrawPoint(renderer, x + dx, y + dy);
+                }
+            }
+        }
+    }
+};
+
 
