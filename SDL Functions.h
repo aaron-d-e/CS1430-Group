@@ -66,7 +66,8 @@ struct Score {
     void addScore(int score);
     void updateLife(Ball &b1);
 };
-
+void gamePause(bool &userClick, Ball &b1);
+void handleUserClick(bool &userClick, Ball &b1, Score &score);
 void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c);
 void drawRectangle(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color c);
 #endif //SDL_FUNCTIONS_H
