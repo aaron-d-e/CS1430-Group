@@ -104,11 +104,11 @@ void Flipper::collision(SDL_Renderer* renderer, Ball& ball, double dt) {
         double newXVel;
         double newYVel;
         if (isFlipped) {
-            newXVel = (abs(angle) > 5) ? speed * cos(angle) * 1.05 : ball.getXVel() * BOUNCINESS;
-            newYVel = (abs(angle) > 5) ? speed * sin(angle) * 1.05 : ball.getYVel() * BOUNCINESS;
+            newXVel = (abs(angle) > 1) ? speed * cos(abs(angle)) * 1.05 : ball.getXVel() * BOUNCINESS;
+            newYVel = (abs(angle) > 1) ? speed * sin(abs(angle)) * 1.05 : ball.getYVel() * BOUNCINESS;
         }else {
-            newXVel = (abs(angle) > 5) ? -speed * cos(abs(angle)) * 1.05 : ball.getXVel() * BOUNCINESS;
-            newYVel = (abs(angle) > 5) ? -speed * sin(abs(angle)) * 1.05 : ball.getYVel() * BOUNCINESS;
+            newXVel = (abs(angle) > 1) ? -speed * cos(abs(angle)) * 1.05 : ball.getXVel() * BOUNCINESS;
+            newYVel = (abs(angle) > 1) ? -speed * sin(abs(angle)) * 1.05 : ball.getYVel() * BOUNCINESS;
         }
 
 
