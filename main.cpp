@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     Triangle t1(0, SCREEN_HEIGHT / 3, 100, 200, {255,255,255,0});
 
     //initialize score
-    Score score(0,10, 1.0);
+    Score score(0,3, 1.0);
 
     //load texture for Flipper
     SDL_Surface* surface = SDL_LoadBMP("../images/flipper.bmp");
@@ -25,13 +25,28 @@ int main(int argc, char** argv) {
     Flipper rightFlipper(renderer, 450, 745,0);
 
     bool isRunning = true;
+    bool userClick = false;
 
     while (isRunning && score.lives > 0) {
+        //wait for user to click screen and drop ball
+        while(!userClick) {
+            while (SDL_PollEvent(&e)) {
+                switch (e.type) {
+                    case SDL_QUIT:
+                        isRunning = false;
+                    break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        handleUserClick(userClick, b1, score);
+                }
+            }
+        }
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
                 case SDL_QUIT:
                     isRunning = false;
                     break;
+                case SDL_MOUSEBUTTONDOWN:
+                    userClick = !userClick;
                 case SDL_KEYDOWN:
                     switch (e.key.keysym.sym) {
                         case SDLK_a:
@@ -97,7 +112,8 @@ int main(int argc, char** argv) {
         leftFlipper.collision(renderer, b1, deltaTime);
         rightFlipper.collision(renderer, b1, deltaTime);
 
-        score.updateLife(b1);
+        //score.updateLife(b1);
+        gamePause(userClick, b1);
 
         b1.renderBall(renderer);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0); // color for triangles
