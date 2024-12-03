@@ -52,6 +52,7 @@ void Ball::reset() {
     y = BALL_INITIAL_Y;
     yVelocity = 0;
     xVelocity = 0;
+
 }
 void Ball::TriangleCollision1(double dT) {  // left triangle
     double distancePointLine1;
@@ -143,14 +144,33 @@ void Triangle::renderTriangle(SDL_Renderer* renderer) {
     SDL_RenderDrawLine(renderer, f.x, f.y, e.x, e.y);
 }
 
+
+
 void Score::updateLife(Ball &b1) {
     // if ball falls off of screen
     if (b1.getY() >= SCREEN_HEIGHT + 100) {
         lives -= 1;
-        SDL_Delay(1000);
+        //SDL_Delay(1000);
         b1.reset();
     }
 }
+
+
+void handleUserClick(bool &userClick, Ball &b1, Score &score) {
+    score.lives -= 1;
+    userClick = !userClick;
+    b1.reset();
+}
+
+void gamePause(bool &userClick, Ball &b1){
+    if (b1.getY() >= SCREEN_HEIGHT + 100) {
+        if (userClick == true) {
+            userClick = false;
+        }
+    }
+}
+
+
 
 
 void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c) {
@@ -165,6 +185,9 @@ void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c) 
         }
     }
 }
+
+
+
 
 void drawRectangle(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color c) {
     SDL_Rect rect = {x, y, width, height};
