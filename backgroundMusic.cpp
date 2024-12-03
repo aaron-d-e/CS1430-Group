@@ -9,17 +9,34 @@
 
 
 backgroundMusic::backgroundMusic(){}
-backgroundMusic::backgroundMusic(string name, double volume){}
-void backgroundMusic::setSong(string name){}
-string backgroundMusic::getSong(){
-    return "blaahhhh";
+backgroundMusic::backgroundMusic(char* path, double volume){
+    songPath = path;
+    currVolume = volume;
 }
-void backgroundMusic::halfVolume(){}
-void backgroundMusic::muteVolume(){}
-void backgroundMusic::unmuteVolume(){}
+void backgroundMusic::setSong(char* path){
+    songPath = path;
+}
+void backgroundMusic::setVolume(int volume){
+    currVolume = volume;
+    Mix_VolumeMusic(currVolume);
+}
+string backgroundMusic::getPath(){
+    return songPath;
+}
+void backgroundMusic::halfVolume(){
+    Mix_VolumeMusic(currVolume/2);
+}
+void backgroundMusic::muteVolume(){
+    Mix_PauseAudio(1);
+}
+void backgroundMusic::unmuteVolume(){
+    Mix_PauseAudio(0);
+}
 void backgroundMusic::playMusic(double volume){
+    currVolume = volume;
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
-    Mix_Music* music = Mix_LoadMUS("/Users/jeffreyrajkumar/Desktop/Intro to CS/Sdl_test_please/Sdl_test_please/GameSongwav");
+    Mix_VolumeMusic(volume);
+    Mix_Music* music = Mix_LoadMUS(songPath);
     Mix_PlayMusic(music, -1);
 }
 
