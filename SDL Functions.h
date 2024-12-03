@@ -5,20 +5,32 @@
 #ifndef SDL_FUNCTIONS_H
 #define SDL_FUNCTIONS_H
 #include <SDL.h>
-#include "SDL_Plotter.h"
 #include <iostream>
-const double GRAVITY = .05;
+const double GRAVITY = 15;
 const double BOUNCINESS = .8;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
+const int BALL_INITIAL_X = 100;
+const int BALL_INITIAL_Y = 550;
 // BALL CLASS
 class Ball {
 public:
     Ball(double xInitialPos, double yInitialPos, double startXVelo, double startYVelo, double r, SDL_Color c); // BALL CONSTRUCTOR
     void Physics(double dT); //FUNCTION THAT CALCULATES PHYSICS FOR BALL
     void renderBall (SDL_Renderer* renderer); //FUNCTION THAT RENDERS BALL TO SCREEN
-    float GetX() const { return x; } //GETS X VALUE, *currently unused*
-    float GetY() const { return y; } // GETS Y VALUE, *currently unused*
+    void reset();
+    double getX() const { return x; } //GETS X VALUE, *currently unused*
+    double getY() const { return y; } // GETS Y VALUE, *currently unused*
+    double getYVel() const {return yVelocity;}
+    double getXVel() const {return xVelocity;}
+    double getRadius(){return radius;};
+    void setX(float tempX){x = tempX;}
+    void setY(float tempY){y = tempY;}
+    void setXVelo(float tempXVelo){xVelocity = tempXVelo;}
+    void setYVelo(float tempYVelo){yVelocity = tempYVelo;}
+    double getRadius() const;
+
+
     void TriangleCollision1(double dT); //COLLISION FOR TRIANGLE ON LEFT SIDE OF SCREEN
     void TriangleCollision2(double dT); // COLLISION FOR TRIANGLE ON RIGHT SIDE OF SCREEN
     //ADD THIS TO OTHER TRIANGLE, ONLY CHANGE POINT VALUES
@@ -47,4 +59,15 @@ private:
 
 };
 
+struct Score {
+    int totalScore;
+    int lives;
+    float multiplier;
+    Score(int totalScore, int lives, float multiplier): totalScore(totalScore), lives(lives), multiplier(multiplier){}
+    void addScore(int score);
+    void updateLife(Ball &b1);
+};
+
+void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c);
+void drawRectangle(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color c);
 #endif //SDL_FUNCTIONS_H
