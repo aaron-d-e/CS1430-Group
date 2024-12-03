@@ -16,13 +16,15 @@ using namespace std;
 class backgroundMusic {
 private:
     string songName;
-    char test;
+    char* songPath;
+    int currVolume;
 public:
     backgroundMusic();
-    backgroundMusic(string name, double volume);
-    void setSong(string name);
-    string getSong();
-    void halfVolume(); 
+    backgroundMusic(char* path, double volume);
+    void setSong(char* path);
+    void setVolume(int volume);
+    string getPath();
+    void halfVolume();
     void muteVolume();
     void unmuteVolume();
     void playMusic(double volume);
