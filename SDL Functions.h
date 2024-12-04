@@ -6,11 +6,11 @@
 #define SDL_FUNCTIONS_H
 #include <SDL.h>
 #include <iostream>
-const double GRAVITY = .0006;
+const double GRAVITY = 8;
 const double BOUNCINESS = .8;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
-const int BALL_INITIAL_X = 100;
+const int BALL_INITIAL_X = 700;
 const int BALL_INITIAL_Y = 550;
 // BALL CLASS
 class Ball {
@@ -29,7 +29,7 @@ public:
     void setXVelo(float tempXVelo){xVelocity = tempXVelo;}
     void setYVelo(float tempYVelo){yVelocity = tempYVelo;}
 
-    
+
     void TriangleCollision1(double dT); //COLLISION FOR TRIANGLE ON LEFT SIDE OF SCREEN
     void TriangleCollision2(double dT); // COLLISION FOR TRIANGLE ON RIGHT SIDE OF SCREEN
     //ADD THIS TO OTHER TRIANGLE, ONLY CHANGE POINT VALUES
@@ -59,12 +59,12 @@ private:
 };
 
 struct Score {
-    int totalScore;
+    int totalScore = 0;
     int lives;
+    int level = 1;
     float multiplier;
     Score(int totalScore, int lives, float multiplier): totalScore(totalScore), lives(lives), multiplier(multiplier){}
     void addScore(int score);
-    void updateLife(Ball &b1);
 };
 void gamePause(bool &userClick, Ball &b1);
 void handleUserClick(bool &userClick, Ball &b1, Score &score);
