@@ -108,10 +108,6 @@ void Ball::TriangleCollision2(double dT) { // right triangle
     }
 
     if(collision2) {
-        /*xVelocity *= BOUNCINESS; //FIX ME ACCURATE X AND Y PHYSICS
-        yVelocity *= -BOUNCINESS;
-        x += xVelocity * dT;
-        y += yVelocity * dT;*/
         double speed = sqrt(pow(xVelocity, 2) + pow(yVelocity, 2));
 
         // Calculate the new velocity components based on angle
@@ -144,21 +140,18 @@ void Triangle::renderTriangle(SDL_Renderer* renderer) {
     SDL_RenderDrawLine(renderer, f.x, f.y, e.x, e.y);
 }
 
-
-
-void Score::updateLife(Ball &b1) {
-    // if ball falls off of screen
-    if (b1.getY() >= SCREEN_HEIGHT + 100) {
-        lives -= 1;
-        //SDL_Delay(1000);
-        b1.reset();
-    }
+void Score::addScore(int score){
+    totalScore += score;
 }
-
 
 void handleUserClick(bool &userClick, Ball &b1, Score &score) {
     score.lives -= 1;
     userClick = !userClick;
+    /*
+     * if (score.lives == 0){
+     *  gameOverScreen();
+     * }
+     */
     b1.reset();
 }
 
@@ -169,8 +162,6 @@ void gamePause(bool &userClick, Ball &b1){
         }
     }
 }
-
-
 
 
 void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c) {
@@ -185,9 +176,6 @@ void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c) 
         }
     }
 }
-
-
-
 
 void drawRectangle(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color c) {
     SDL_Rect rect = {x, y, width, height};
