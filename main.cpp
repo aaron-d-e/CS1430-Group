@@ -40,10 +40,10 @@ int main(int argc, char ** argv)
     color c;
     int size;
     Uint32 RGB;
+    background.playMusic(1);
     while (!g.getQuit())
     {
         
-        background.playMusic(1);
         if(g.kbhit()){
             switch(toupper(g.getKey())){
                 case 'C': g.clear();
