@@ -29,7 +29,7 @@ void soundEffect::playSound(double volume){
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
     curChunk = Mix_LoadWAV(soundPath);
     Mix_VolumeChunk(curChunk, currVolume);
-    Mix_PlayChannel(2, curChunk, 1);
+    Mix_PlayChannel(-1, curChunk, 1);
 
     
 }
