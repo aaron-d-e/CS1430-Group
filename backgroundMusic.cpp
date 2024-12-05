@@ -37,7 +37,7 @@ void backgroundMusic::unmuteVolume(){
 void backgroundMusic::playMusic(double volume){
     currVolume = volume;
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
-    Mix_Volume(1, currVolume);
+    Mix_VolumeMusic(currVolume);
     Mix_Music* music = Mix_LoadMUS(songPath);
     Mix_PlayMusic(music, -1);
 }
