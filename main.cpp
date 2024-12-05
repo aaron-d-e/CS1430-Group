@@ -1,66 +1,79 @@
-#include <iostream>
+//
+//  main.cpp
+//  Sdl_test_please
+//
+//  Created by Jeffrey Rajkumar on 11/21/24.
+//
 
+/*#include <iostream>
+#include "backgroundMusic.h"
+#include "SoundEffect.h"
+
+int main(){
+    int x = 0;
+    soundEffect sound("/Users/jeffreyrajkumar/Library/Mobile Documents/com~apple~CloudDocs/Downloads/The Essential Retro Video Game Sound Effects Collection [512 sounds] By Juhani Junkala/General Sounds/Interactions/sfx_sounds_interaction1.wav", 100);
+    backgroundMusic background("/Users/jeffreyrajkumar/Library/Mobile Documents/com~apple~CloudDocs/Downloads/5 Action Chiptunes By Juhani Junkala 2/Juhani Junkala [Retro Game Music Pack] Level 3.wav", 100);
+
+    background.playMusic(100);
+        
+    cout << "HELLOOOOO";
+    
+    
+    
+}*/
+#include <iostream>
+#include <cmath>
 #include "SDL_Plotter.h"
-#include "SDL Functions.h"
-#include "Enemies.h"
+#include "backgroundMusic.h"
+#include "SoundEffect.h"
 
 using namespace std;
 
+void drawCircle(point loc, int size, color c, SDL_Plotter& g);
 int main(int argc, char ** argv)
 {
-    double CURRENT;
-    double PAST;
-    double deltaTime;
-    SDL_Event e;
-    SDL_Window* window = SDL_CreateWindow("Pinball Game 1.0", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 800, SDL_WINDOW_SHOWN); // window
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); // renderer
 
-    Ball b1(100, 100, -0.3, -0.1, 25, {255, 0, 0, 255}); // ball object
-    Triangle t1(0, SCREEN_HEIGHT / 3, 100, 200, {255,255,255,0});
-    Enemies e1(30, 400, 400, {0,0,255,255});
-
-
-    //game loop
-    bool isRunning = true;
-    bool triangleRendered = false;
-
-
-    while(isRunning) {
-        while(SDL_PollEvent(&e)) {
-            if(e.type == SDL_QUIT) {
-                isRunning = false;
+    backgroundMusic background("/Users/jeffreyrajkumar/Library/Mobile Documents/com~apple~CloudDocs/Downloads/5 Action Chiptunes By Juhani Junkala 2/Juhani Junkala [Retro Game Music Pack] Level 3.wav", 1);
+    soundEffect sound("/Users/jeffreyrajkumar/Library/Mobile Documents/com~apple~CloudDocs/Downloads/The Essential Retro Video Game Sound Effects Collection [512 sounds] By Juhani Junkala/General Sounds/Interactions/sfx_sounds_interaction1.wav", 50);
+    SDL_Plotter g(1000,1000);
+    point p;
+    color c;
+    int size;
+    Uint32 RGB;
+    while (!g.getQuit())
+    {
+        
+        background.playMusic(1);
+        if(g.kbhit()){
+            switch(toupper(g.getKey())){
+                case 'C': g.clear();
+                          break;
             }
         }
 
+        if(g.mouseClick()){
+            p = g.getMouseClick();
+            size = rand()%50;
+            c.R  = rand()%256;
+            c.G  = rand()%256;
+            c.B  = rand()%256;
+            drawCircle(p, size, c, g);
+            sound.playSound(50);
+        }
+        g.update();
 
-        PAST = CURRENT;
-        CURRENT = SDL_GetPerformanceCounter();
-        deltaTime = ((CURRENT - PAST) * 1000.0) / SDL_GetPerformanceFrequency();
-
-
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); //background color
-        SDL_RenderClear(renderer);
-
-        b1.Physics(deltaTime); // ball physics
-        b1.TriangleCollision1(deltaTime); // left triangle
-        b1.TriangleCollision2(deltaTime); // right triangle
-
-        b1.renderBall(renderer);
-
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0); // color for triangles
-        t1.renderTriangle(renderer);
-
-        //RENDER ENEMIES
-        e1.RenderEnemy(renderer);
+    }
+}
 
 
-        SDL_RenderPresent(renderer);
-        SDL_RenderClear(renderer);
+void drawCircle(point loc, int size, color c, SDL_Plotter& g){
+    for(double i = -size; i <= size;i+=0.1){
+        for(double j = -size; j <= size; j+=0.1){
+            if(i*i + j*j <= size*size){
+                g.plotPixel(round(loc.x+i),round(loc.y+j),c);
+                
+            }
+        }
     }
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    return 0;
 }
