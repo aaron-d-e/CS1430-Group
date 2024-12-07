@@ -20,6 +20,8 @@ void Enemies::RenderEnemy(SDL_Renderer* renderer, double dT, Ball& b, Score& s) 
             }
         }
     }
+
+    // enemy collision calculation
     double accuracy = 20;
     if(sqrt(pow(b.getX() - xPosition, 2) + pow(b.getY() - yPosition, 2)) <= radius + accuracy) {
         //add 10 to score
@@ -32,21 +34,7 @@ void Enemies::RenderEnemy(SDL_Renderer* renderer, double dT, Ball& b, Score& s) 
         b.setYVelo(-b.getYVel());
     }
 }
-/*
-void Enemies::EnemyCollision(double dT, Ball& b, Score& s) {
-    double accuracy = 20;
-    if(sqrt(pow(b.getX() - xPosition, 2) + pow(b.getY() - yPosition, 2)) <= radius + accuracy) {
-        //add 10 to score
-        s.addScore(10);
-        lives -= 1;
-        if (lives == 0){
-            isSpawned = false;
-        }
-        b.setXVelo(-b.getXVel());
-        b.setYVelo(-b.getYVel());
-    }
 
-}*/
 
 void Enemies::respawn(Score &s, int min, int max){
     lives = s.level;
@@ -70,6 +58,9 @@ double Enemies::getYPostion()const {
     return yPosition;
 }
 
-int Enemies::getLives()const{
-    return lives;
+bool Enemies::getIsSpawned() const {
+    return isSpawned;
+}
+void Enemies::setIsSpawned(bool val){
+    isSpawned = val;
 }
