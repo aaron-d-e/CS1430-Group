@@ -5,25 +5,26 @@
 #ifndef ENEMIES_H
 #define ENEMIES_H
 #include <SDL.h>
-#include "SDL_Functions.h"
+#include "SDL Functions.h"
 
 class Enemies {
 
 public:
-    Enemies(double r, double xPos, double yPos, SDL_Color c, int lives); // ENEMIES CONSTRUCTOR
-    void RenderEnemy(SDL_Renderer* renderer, double dT, Ball& b, Score& s); // RENDERS NUMBER OF ENEMIES
-    void EnemyCollision(double dT, Ball& b, Score& s); // FIX ME
-    void respawn(Score &s, int min, int max);
+    Enemies(double r, double xPos, double yPos, SDL_Color c); // ENEMIES CONSTRUCTOR
+    void RenderEnemy(SDL_Renderer* renderer); // RENDERS NUMBER OF ENEMIES
+    void EnemyCollision(double dT, Ball& b, Score& s, Enemies& e); // FIX ME
     void setXPosition(double xPos);
     void setYPosition(double yPos);
     double getXPosition()const;
-    double getYPostion()const;
-    int getLives()const;
-    bool isSpawned = true;
+    double getYPosition()const;
+    bool getCollided()const {return collided;}
+    void setCollided(bool c) {collided = c;}
+
+
 
 private:
     double radius;
-    int lives;
+    bool collided = false;
     double xPosition;
     double yPosition;
     SDL_Color color;
