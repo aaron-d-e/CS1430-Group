@@ -29,6 +29,7 @@ void Flipper::renderFlipper(SDL_Renderer *renderer, SDL_Texture* texture, bool i
     SDL_RenderCopyEx(renderer, texture, nullptr, &box, angle, &center, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
+
 void Flipper::incrementAngle(){
     isMoving = true;
     if (isFlipped){
@@ -111,7 +112,6 @@ void Flipper::collision(SDL_Renderer* renderer, Ball& ball, double dt) {
 
         double speed = sqrt(pow(ball.getXVel(), 2) + pow(ball.getYVel(), 2));
 
-        // Calculate the new velocity components based on angle
         double newXVel;
         double newYVel;
         if (isFlipped) {
