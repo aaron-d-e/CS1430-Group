@@ -6,7 +6,7 @@
 #define SDL_FUNCTIONS_H
 #include <SDL.h>
 #include <iostream>
-const double GRAVITY = 15;
+const double GRAVITY = 10;
 const double BOUNCINESS = .8;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
@@ -60,12 +60,15 @@ private:
 };
 
 struct Score {
-    int totalScore;
+    int totalScore = 0;
     int lives;
     float multiplier;
     Score(int totalScore, int lives, float multiplier): totalScore(totalScore), lives(lives), multiplier(multiplier){}
-    void addScore(int score);
+    void addScore(int score){totalScore += score;}
     void updateLife(Ball &b1);
+    int getScore()const {
+        return totalScore;
+    }
 };
 
 void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c);
