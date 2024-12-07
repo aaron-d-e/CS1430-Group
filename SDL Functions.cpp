@@ -164,6 +164,9 @@ void gamePause(bool &userClick, Ball &b1){
 }
 
 
+
+
+/*
 void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c) {
     SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
     for(int i = 0; i < radius * 2; i++) {
@@ -181,4 +184,4 @@ void drawRectangle(SDL_Renderer* renderer, int x, int y, int width, int height, 
     SDL_Rect rect = {x, y, width, height};
     SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
     SDL_RenderFillRect(renderer, &rect);
-}
+}*/
