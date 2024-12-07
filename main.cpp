@@ -5,7 +5,7 @@
 using namespace std;
 
 //constants for capping frame rate
-const int SCREEN_FPS = 60;
+const int SCREEN_FPS = 100;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
 int main(int argc, char** argv) {
@@ -27,7 +27,8 @@ int main(int argc, char** argv) {
     Enemies e2(50, 200, 200, {255,255,255,255}, score.level);
     Enemies e3(50, 600, 200, {255,255,255,255}, score.level);
     Enemies e4(50, 400, 550, {255,255,255,255}, score.level);
-    e4.isSpawned = false;
+    //default enemy 4 to not spawned
+    e4.setIsSpawned(false);
 
 
 
@@ -35,6 +36,7 @@ int main(int argc, char** argv) {
     SDL_Surface* surface = SDL_LoadBMP("../images/flipper.bmp");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
+    //create flippers
     Flipper leftFlipper(renderer, 200,745,0);
     Flipper rightFlipper(renderer, 450, 745,0);
 
@@ -47,7 +49,7 @@ int main(int argc, char** argv) {
     int countedFrames = 0;
     fpsTimer.start();
 
-    while (isRunning && score.lives > 0) {
+    while (isRunning && score.level > 0) {
         //framerate cap timer
         capTimer.start();
 
@@ -62,6 +64,11 @@ int main(int argc, char** argv) {
                         break;
                     case SDL_MOUSEBUTTONDOWN:
                         handleUserClick(userClick, b1, score);
+                        break;
+                    case SDL_KEYDOWN:
+                        if (e.key.keysym.sym == SDLK_SPACE) {
+                            handleUserClick(userClick, b1, score);
+                        }
                         break;
                     default:
                         break;
@@ -137,21 +144,22 @@ int main(int argc, char** argv) {
 
         SDL_SetRenderDrawColor(renderer,255,255,255,0);
 
-
+        //render flippers
         leftFlipper.renderFlipper(renderer, texture,true);
         rightFlipper.renderFlipper(renderer,texture,false);
         leftFlipper.collision(renderer, b1, deltaTime);
         rightFlipper.collision(renderer, b1, deltaTime);
 
-
+        //pause game when ball is out of bounds
         gamePause(userClick, b1);
 
-        if (e1.isSpawned) {e1.RenderEnemy(renderer, deltaTime, b1, score);}
-        if (e2.isSpawned) {e2.RenderEnemy(renderer, deltaTime, b1, score);}
-        if (e3.isSpawned) {e3.RenderEnemy(renderer, deltaTime, b1, score);}
-        if (e4.isSpawned) {e4.RenderEnemy(renderer, deltaTime, b1, score);}
+        //spawn enemies if they still have lives
+        if (e1.getIsSpawned()) {e1.RenderEnemy(renderer, deltaTime, b1, score);}
+        if (e2.getIsSpawned()) {e2.RenderEnemy(renderer, deltaTime, b1, score);}
+        if (e3.getIsSpawned()) {e3.RenderEnemy(renderer, deltaTime, b1, score);}
+        if (e4.getIsSpawned()) {e4.RenderEnemy(renderer, deltaTime, b1, score);}
         //go to next level
-        if (!e1.isSpawned && !e2.isSpawned && !e3.isSpawned && !e4.isSpawned){
+        if (!e1.getIsSpawned() && !e2.getIsSpawned() && !e3.getIsSpawned() && !e4.getIsSpawned()){
             score.level += 1;
             e1.respawn(score, 100, 400);
             e2.respawn(score, 100, 400);
