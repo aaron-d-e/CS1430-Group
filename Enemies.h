@@ -10,16 +10,51 @@
 class Enemies {
 
 public:
-    Enemies(double r, double xPos, double yPos, SDL_Color c, int lives); // ENEMIES CONSTRUCTOR
-    void RenderEnemy(SDL_Renderer* renderer, double dT, Ball& b, Score& s); // RENDERS NUMBER OF ENEMIES
-    void EnemyCollision(double dT, Ball& b, Score& s); // FIX ME
+    //Description: constructor for Enemies class
+    //Return: none
+    //Precondition: Enemies called with correct parameters
+    //PostCondition: Enemies object created
+    Enemies(double r, double xPos, double yPos, SDL_Color c, int lives);
+    //Description: Render Enemy and calculate enemy collision
+    //Return: none
+    //Precondition: enemy object exists
+    //PostCondition: enemy is rendered and collision calculated
+    void RenderEnemy(SDL_Renderer* renderer, double dT, Ball& b, Score& s);
+    //Description: respawns enemy
+    //Return: none
+    //Precondition: enemy exists
+    //PostCondition: enemy is rerendered to screen
     void respawn(Score &s, int min, int max);
+    //Description: sets new enemy xPosition
+    //Return: none
+    //Precondition: enemy object exists
+    //PostCondition: enemy xPosition is updated
     void setXPosition(double xPos);
+    //Description: sets new enemy yPosition
+    //Return: none
+    //Precondition: enemy object exists
+    //Postcondition: enemy xPosition is updated
     void setYPosition(double yPos);
+    //Description: gets enemy object xPosition
+    //Return: double
+    //Precondition: enemy object exists
+    //Postcondition: xPosition returned
     double getXPosition()const;
+    //Description: gets enemy object yPosition
+    //Return: double
+    //Precondition: enemy object exists
+    //Postcondition: yPosition returned
     double getYPostion()const;
-    int getLives()const;
-    bool isSpawned = true;
+    //Description: returns if enemy should be spawned
+    //Return: bool
+    //Precondition: enemy object exists
+    //Postcondition: isSpawned returned
+    bool getIsSpawned()const;
+    //Description: set is spawned value
+    //Return: none
+    //Precondition: enemy object exists
+    //Postcondition: isSpawned is set to new value
+    void setIsSpawned(bool val);
 
 private:
     double radius;
@@ -27,6 +62,7 @@ private:
     double xPosition;
     double yPosition;
     SDL_Color color;
+    bool isSpawned = true;
 
 };
 
