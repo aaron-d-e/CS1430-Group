@@ -20,24 +20,7 @@ private:
     Mix_Chunk* curChunk;
 
 public:
-    //************************************************************
-    // description: Default constructor for the soundEffect class.
-    //              Initializes the object with no sound and 
-    //              default volume level.                        
-    // return: None                                              
-    // pre: None                                                 
-    // post: A soundEffect object is created with no sound loaded. 
-    //************************************************************
     soundEffect();
-
-    //************************************************************
-    // description: Constructor that loads a sound from the given 
-    //              path and sets the initial volume.            
-    // return: None                                              
-    // pre: The file at the provided path must exist and be a     
-    //      valid sound file.                                    
-    // post: A soundEffect object is created with the sound loaded. 
-    //************************************************************
     soundEffect(char* path, double volume);
 
     //************************************************************
