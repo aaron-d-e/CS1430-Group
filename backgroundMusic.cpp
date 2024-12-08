@@ -12,7 +12,6 @@ backgroundMusic::backgroundMusic(){}
 backgroundMusic::backgroundMusic(char* path, double volume){
     songPath = path;
     currVolume = volume;
-    SDL_AudioInit(songPath);
 
 }
 void backgroundMusic::setSong(char* path){
@@ -38,8 +37,11 @@ void backgroundMusic::playMusic(double volume){
     currVolume = volume;
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
     Mix_VolumeMusic(currVolume);
-    Mix_Music* music = Mix_LoadMUS(songPath);
+    music = Mix_LoadMUS(songPath);
     Mix_PlayMusic(music, -1);
+}
+void backgroundMusic::free(){
+    Mix_FreeMusic(music);
 }
 
 
