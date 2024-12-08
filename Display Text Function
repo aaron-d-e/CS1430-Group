@@ -1,0 +1,22 @@
+void Enemies::displayScore(Score& s, SDL_Renderer* rend) {
+    //  font shenanigans
+    if(TTF_Init() < 0) {
+        SDL_Delay(100);
+        exit(1);
+    }
+    TTF_Font* font = TTF_OpenFont("../Assets/Background/ARCADECLASSIC.TTF" ,24);
+    if(!font) {
+        SDL_Delay(100);
+        exit(1);
+    }
+    SDL_Color White = {255,255,255};
+    string scoreText = "Score " + to_string(s.totalScore);
+    SDL_Surface* textSurface =  TTF_RenderText_Solid(font, scoreText.c_str(), White);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(rend, textSurface);
+    SDL_FreeSurface(textSurface);
+    SDL_Rect textRect = { 10 ,10 ,400, 100};
+    SDL_RenderCopy(rend, textTexture, NULL, &textRect);
+
+    //SDL_FreeSurface(textSurface);
+
+}
