@@ -26,10 +26,12 @@ string soundEffect::getPath(){
 }
 void soundEffect::playSound(double volume){
     currVolume = volume;
-    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
-    curChunk = Mix_LoadWAV(soundPath);
+    //Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
+    Mix_Chunk* curChunk = Mix_LoadWAV(soundPath);
     Mix_VolumeChunk(curChunk, currVolume);
-    Mix_PlayChannel(-1, curChunk, 1);
+    Mix_PlayChannel(-1, curChunk, 0);
 
-    
+}
+void soundEffect::free(){
+    Mix_FreeChunk(curChunk);
 }
