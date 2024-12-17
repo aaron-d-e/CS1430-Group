@@ -11,22 +11,18 @@ Ball::Ball(double xInitialPos, double yInitialPos, double startXVelo, double sta
         x(xInitialPos), y(yInitialPos), xVelocity(startXVelo), yVelocity(startYVelo), radius(r), color(c) {}
 
 void Ball::Physics(double dT) {
-    //yVelocity += GRAVITY;
-
     yVelocity += GRAVITY / (dT * dT);
 
     y += yVelocity * dT;
     x += xVelocity * dT;
 
-
+    //wall collision
     if (x <= radius || x >= SCREEN_WIDTH - radius) {
         xVelocity *= -BOUNCINESS;
         x = (x <= radius) ? radius : SCREEN_WIDTH - radius;
     }
-    /*if (y <= radius || y >= SCREEN_HEIGHT - radius) {
-        yVelocity *= -BOUNCINESS;
-        y = (y <= radius) ? radius : SCREEN_HEIGHT - radius;
-    }*/
+    //only one condition for ceiling because ball needs
+    //to fall through floor
     if (y <= radius) {
         yVelocity *= -BOUNCINESS;
         y = (y <= radius) ? radius : SCREEN_HEIGHT - radius;
@@ -147,11 +143,6 @@ void Score::addScore(int score){
 void handleUserClick(bool &userClick, Ball &b1, Score &score) {
     score.lives -= 1;
     userClick = !userClick;
-    /*
-     * if (score.lives == 0){
-     *  gameOverScreen();
-     * }
-     */
     b1.reset();
 }
 
@@ -164,24 +155,70 @@ void gamePause(bool &userClick, Ball &b1){
 }
 
 
+void gameOverScreen(SDL_Renderer* renderer, Score& s, SDL_Event e) {
+    //clear screen
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+    SDL_RenderClear(renderer);
+    bool exit = false;
+    while (!exit) {
+        //allow user to quit end game screen
+        while (SDL_PollEvent(&e)) {
+            switch (e.type) {
+                case SDL_QUIT:
+                case SDL_MOUSEBUTTONDOWN:
+                case SDL_KEYDOWN:
+                    exit = true;
+                break;
 
-
-/*
-void drawCircle (SDL_Renderer* renderer, int x, int y, int radius, SDL_Color c) {
-    SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
-    for(int i = 0; i < radius * 2; i++) {
-        for(int j = 0; j < radius * 2; j++) {
-            int dx = radius - i;
-            int dy = radius - j;
-            if((dx*dx + dy*dy) <= (radius * radius)) {
-                SDL_RenderDrawPoint(renderer, x + dx, y + dy);
+                default:
+                    break;
             }
         }
+
+        displayText(200,350,400,60,"Game Over",renderer, {255,0,0,0});
+        displayScore(320,400, "Score ", s.totalScore, renderer);
+        SDL_RenderPresent(renderer);
     }
 }
 
-void drawRectangle(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color c) {
-    SDL_Rect rect = {x, y, width, height};
-    SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
-    SDL_RenderFillRect(renderer, &rect);
-}*/
+
+
+void displayScore(int xPos, int yPos, const char* text, int inputNum, SDL_Renderer* rend) {
+    //  font shenanigans
+    if(TTF_Init() < 0) {
+        SDL_Delay(100);
+        exit(1);
+    }
+    TTF_Font* font = TTF_OpenFont("../Assets/Background/ARCADECLASSIC.TTF" ,24);
+    if(!font) {
+        SDL_Delay(100);
+        exit(1);
+    }
+    SDL_Color White = {255,255,255};
+    const char* scoreText = (text + to_string(inputNum)).c_str();
+    SDL_Surface* textSurface =  TTF_RenderText_Solid(font, scoreText, White);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(rend, textSurface);
+    SDL_FreeSurface(textSurface);
+    SDL_Rect textRect = { xPos ,yPos ,150, 40};
+    SDL_RenderCopy(rend, textTexture, NULL, &textRect);
+
+}
+
+void displayText(int xPos, int yPos, int length, int width, const char* text, SDL_Renderer* renderer, SDL_Color c) {
+    //  font shenanigans
+    if(TTF_Init() < 0) {
+        SDL_Delay(100);
+        exit(1);
+    }
+    TTF_Font* font = TTF_OpenFont("../Assets/Background/ARCADECLASSIC.TTF" ,20);
+    if(!font) {
+        SDL_Delay(100);
+        exit(1);
+    }
+    const char* scoreText = text;
+    SDL_Surface* textSurface =  TTF_RenderText_Solid(font, scoreText, c);
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    SDL_FreeSurface(textSurface);
+    SDL_Rect textRect = { xPos ,yPos ,length, width};
+    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+}
