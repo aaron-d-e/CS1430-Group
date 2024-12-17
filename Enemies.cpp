@@ -3,6 +3,7 @@
 //
 
 #include "Enemies.h"
+#include "SoundEffect.h"
 #include <cmath>
 
 
@@ -25,6 +26,8 @@ void Enemies::RenderEnemy(SDL_Renderer* renderer, double dT, Ball& b, Score& s) 
     double accuracy = 20;
     if(sqrt(pow(b.getX() - xPosition, 2) + pow(b.getY() - yPosition, 2)) <= radius + accuracy) {
         //add 10 to score
+        soundEffect sound("../Assets/Sounds/sfx_sounds_interaction1.wav", 1);
+        sound.playSound(125);
         s.addScore(10);
         lives -= 1;
         if (lives == 0){
