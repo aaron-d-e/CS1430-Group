@@ -34,6 +34,16 @@ public:
     //Precondition: flipper object exists
     //Postcondition: flipper angle incremented
     void incrementAngle();
+    //Description: get flipper angle
+    //Return: float
+    //Precondition: flipper object exists
+    //Postcondition: flipper angle returned
+    float getAngle();
+    //Description: set flipper angle
+    //Return: none
+    //Precondition: flipper object exists
+    //Postcondition: flipper angle changed
+    void setAngle(float angle);
     //Description: decrement flipper angle
     //Return: none
     //Precondition: flipper object exists
