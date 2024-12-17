@@ -1,11 +1,11 @@
 #include "Flipper.h"
 #include "LTimer.h"
 #include "Enemies.h"
-//#include <SDL2_TTF.h>
+#include "BackgroundMusic.h"
 using namespace std;
 
 //constants for capping frame rate
-const int SCREEN_FPS = 100;
+const int SCREEN_FPS = 160;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
 int main(int argc, char** argv) {
@@ -22,6 +22,10 @@ int main(int argc, char** argv) {
     //initialize score
     Score score(0,10, 1.0);
 
+    //initialize background music
+    //backgroundMusic music("../Assets/Sounds/retro-city-14099.wav", 1);
+    backgroundMusic music("../Assets/Sounds/retro-city-14099.wav", 1);
+
     //initialize enemies
     Enemies e1(50, 400, 400, {255,255,255,255}, score.level);
     Enemies e2(50, 200, 200, {255,255,255,255}, score.level);
@@ -33,7 +37,7 @@ int main(int argc, char** argv) {
 
 
     //load texture for Flipper
-    SDL_Surface* surface = SDL_LoadBMP("../images/flipper.bmp");
+    SDL_Surface* surface = SDL_LoadBMP("../Assets/images/flipper.bmp");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
     //create flippers
@@ -49,12 +53,28 @@ int main(int argc, char** argv) {
     int countedFrames = 0;
     fpsTimer.start();
 
-    while (isRunning && score.level > 0) {
+    music.playMusic(100);
+    while (isRunning &&  score.lives > 0) {
         //framerate cap timer
         capTimer.start();
 
         //wait for user to click screen and drop ball
         while(!userClick) {
+            //make sure flippers return to default
+            if (leftFlipper.getAngle() != 0){leftFlipper.setAngle(0);}
+            if (rightFlipper.getAngle() != 0){rightFlipper.setAngle(0);}
+            leftFlipper.keydown = false;
+            rightFlipper.keydown = false;
+
+            //display waiting screen text
+            SDL_SetRenderDrawColor(renderer,0,0,0,0);
+            if (capTimer.getTicks() > 10) {
+                displayText(200,350,400,60,"Press Space to Drop Ball",renderer, {0,255,0,0});
+            }
+            SDL_RenderPresent(renderer);
+
+
+
             while (SDL_PollEvent(&e)) {
                 switch (e.type) {
                     case SDL_QUIT:
@@ -74,6 +94,7 @@ int main(int argc, char** argv) {
                         break;
                 }
             }
+
         }
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
@@ -150,6 +171,10 @@ int main(int argc, char** argv) {
         leftFlipper.collision(renderer, b1, deltaTime);
         rightFlipper.collision(renderer, b1, deltaTime);
 
+        //render score and lives to top of screen
+        displayScore(10,10,"Score ", score.totalScore, renderer);
+        displayScore(630,10, "Lives ",score.lives, renderer);
+
         //pause game when ball is out of bounds
         gamePause(userClick, b1);
 
@@ -179,9 +204,13 @@ int main(int argc, char** argv) {
         ++countedFrames;
     }
 
+    //display game over screen if lives = 0
+    gameOverScreen(renderer, score, e);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
     return 0;
 }
+
