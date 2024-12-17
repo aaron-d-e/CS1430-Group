@@ -6,7 +6,10 @@
 #define SDL_FUNCTIONS_H
 #include <SDL.h>
 #include <iostream>
-const double GRAVITY = 5;
+#include <SDL_ttf.h>
+using namespace std;
+
+const double GRAVITY = 2.5;
 const double BOUNCINESS = .8;
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 800;
@@ -149,5 +152,23 @@ void gamePause(bool &userClick, Ball &b1);
 //Precondition: game is paused
 //Postcondition: game is restarted
 void handleUserClick(bool &userClick, Ball &b1, Score &score);
+
+//Description: displays game over and score
+//Return: none
+//Precondition: arguments passed correctly
+//Postcondition: game ends
+void gameOverScreen(SDL_Renderer* renderer, Score& s, SDL_Event e);
+
+//Description: displays text and number input
+//Return: none
+//Precondition: arguments passed correctly
+//Postcondition: text and number are displayed
+void displayScore(int xPos, int yPos, const char* text, int inputNum, SDL_Renderer* rend);
+//Description: displays text
+//Return: none
+//Precondition: arguments passed correctly
+//Postcondition: text is displayed
+void displayText(int xPos, int yPos, int length, int width, const char* text, SDL_Renderer* renderer, SDL_Color c);
+
 
 #endif //SDL_FUNCTIONS_H
