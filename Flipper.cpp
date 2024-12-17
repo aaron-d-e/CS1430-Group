@@ -2,7 +2,6 @@
 // Created by Andrew Hutcheson on 11/19/2024.
 //
 #include "Flipper.h"
-
 #include "SDL_Functions.h"
 
 double toRadians(double degrees) {
@@ -56,6 +55,14 @@ void Flipper::decrementAngle(){
     }
 }
 
+float Flipper::getAngle() {
+    return angle;
+}
+
+void Flipper::setAngle(float angle) {
+    this->angle = angle;
+}
+
 void Flipper::update(){
     if (keydown) {
         incrementAngle();
@@ -96,7 +103,7 @@ void Flipper::collision(SDL_Renderer* renderer, Ball& ball, double dt) {
     double distance1;
     double lineLength;
 
-    distance2 = sqrt(pow(basePoint.x - ball.getX(), 2) + pow(basePoint.y - ball.getY(), 2)); // right triangle
+    distance2 = sqrt(pow(basePoint.x - ball.getX(), 2) + pow(basePoint.y - ball.getY(), 2));
     distance1 = sqrt(pow(endPoint.x - ball.getX(), 2) + pow(endPoint.y - ball.getY(), 2));
     lineLength = sqrt(pow(basePoint.x - endPoint.x, 2) + pow(basePoint.y - endPoint.y, 2));
 
@@ -105,11 +112,6 @@ void Flipper::collision(SDL_Renderer* renderer, Ball& ball, double dt) {
     }
 
     if(collision){
-        /*ball.setXVelo(ball.getXVel() * BOUNCINESS * 1.5); //FIX ME ACCURATE X AND Y PHYSICS
-        ball.setYVelo(-ball.getYVel() * BOUNCINESS * 1.5);
-        ball.setX(ball.getX() + ball.getXVel() * dt);
-        ball.setY(ball.getY() + ball.getYVel() * dt);*/
-
         double speed = sqrt(pow(ball.getXVel(), 2) + pow(ball.getYVel(), 2));
 
         double newXVel;
@@ -124,7 +126,7 @@ void Flipper::collision(SDL_Renderer* renderer, Ball& ball, double dt) {
         }
         // Update ball's velocity
         ball.setXVelo(newXVel);
-        ball.setYVelo(-newYVel); // Reverse Y velocity to simulate bounce
+        ball.setYVelo(-newYVel);
 
         // Update ball's position
         ball.setX(ball.getX() + ball.getXVel() * dt);
